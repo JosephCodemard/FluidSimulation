@@ -1,20 +1,6 @@
 #include "primitives.h"
 
 
-
-Vec3::Vec3(double _x, double _y, double _z) {
-	x = _x;
-	y = _y;
-	z = _z;
-}
-
-float Vec3::magnitude() {
-	return sqrt((x * x) + (y * y) + (z * z));
-}
-float Vec3::sqrMagnitude() {
-	return ((x * x) + (y * y) + (z * z));
-}
-
 Vec3 Vec3::abs() {
 	return Vec3(std::abs(x), std::abs(y), std::abs(z));
 }
@@ -34,15 +20,6 @@ double Vec3::dot(const Vec3& v) const {
 }
 
 
-
-
-Vec3 Vec3::operator+(const Vec3& rhs) {
-	return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
-}
-
-Vec3 Vec3::operator-(const Vec3& rhs) {
-	return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
-}
 
 
 
@@ -65,14 +42,6 @@ Vec3& Vec3::operator-=(const Vec3& rhs) {
 
 
 
-Vec3 Vec3::operator/(const double& rhs) {
-	return Vec3(x / rhs, y / rhs, z / rhs);
-}
-
-
-Vec3 Vec3::operator*(const double& rhs) {
-	return Vec3(x * rhs, y * rhs, z * rhs);
-}
 
 
 
@@ -80,23 +49,6 @@ Vec3 Vec3::operator*(const double& rhs) {
 
 
 
-
-
-
-
-
-Vec2::Vec2(double _x, double _y) {
-	x = _x;
-	y = _y;
-}
-
-float Vec2::magnitude() {
-	return std::sqrt((x * x) + (y * y));
-}
-
-float Vec2::sqrMagnitude() {
-	return ((x * x) + (y * y));
-}
 
 Vec2 Vec2::abs() {
 	return Vec2(std::abs(x), std::abs(y));
@@ -115,13 +67,6 @@ void Vec2::_printInfo() {
 	std::cout << "Vec2(" << x << ", " << y << ")" << std::endl;
 }
 
-Vec2 Vec2::operator+(const Vec2& rhs) {
-	return Vec2(x + rhs.x, y + rhs.y);
-}
-
-Vec2 Vec2::operator-(const Vec2& rhs) {
-	return Vec2(x - rhs.x, y - rhs.y);
-}
 
 Vec2& Vec2::operator+=(const Vec2& rhs) {
 	this->x += rhs.x;
@@ -134,15 +79,6 @@ Vec2& Vec2::operator-=(const Vec2& rhs) {
 	this->y -= rhs.y;
 	return *this;
 }
-
-Vec2 Vec2::operator/(const double& rhs) {
-	return Vec2(x / rhs, y / rhs);
-}
-
-Vec2 Vec2::operator*(const double& rhs) {
-	return Vec2(x * rhs, y * rhs);
-}
-
 
 
 

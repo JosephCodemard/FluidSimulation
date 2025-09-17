@@ -223,14 +223,14 @@ class SPHSimulation2D : public Window {
 public:
 
 
-	int itterationsPerFrame = 20;
+	int itterationsPerFrame = 1;
 
 	double zoomRate = 1E-3;
 	double panRate = 2E-2;
 	Vec3 initalScalefactor = Vec3(1E-2, 1E-2, 1);
 
-	int nParticles = 2500;
-	Vec2 simulationDimentions = Vec2(256,256);
+	int nParticles = 5000;
+	Vec2 simulationDimentions = Vec2(256, 128);
 	double dt = 0.001;
 
 	SPHFluidSimulation2D fluidSim = SPHFluidSimulation2D(nParticles, simulationDimentions);

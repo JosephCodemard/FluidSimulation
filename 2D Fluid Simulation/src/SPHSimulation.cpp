@@ -120,23 +120,23 @@ void SPHFluidSimulation2D::step(double dt) {
         // enforce boundary conditions
         if (particle->pos.x < EPSILON)
         {
-            particle->velocity.x = BoundDamping * particle->velocity.x;
+            particle->velocity.x = -BoundDamping * particle->velocity.x;
             particle->pos.x = EPSILON;
         }
         if (particle->pos.x > simulationDimensions.x)
         {
-            particle->velocity.x = BoundDamping * particle->velocity.x;
+            particle->velocity.x = -BoundDamping * particle->velocity.x;
             particle->pos.x = simulationDimensions.x - EPSILON;
         }
 
         if (particle->pos.y < EPSILON)
         {
-            particle->velocity.y = BoundDamping * particle->velocity.y;
+            particle->velocity.y = -BoundDamping * particle->velocity.y;
             particle->pos.y = EPSILON;
         }
         if (particle->pos.y > simulationDimensions.y)
         {
-            particle->velocity.y = BoundDamping * particle->velocity.y;
+            particle->velocity.y = -BoundDamping * particle->velocity.y;
             particle->pos.y = simulationDimensions.y - EPSILON;
         }
     }
@@ -214,7 +214,7 @@ void SPHFluidSimulation2D::step(double dt) {
 
 void SPHFluidSimulation2D::computeForces() {
 
-//#pragma omp parallel for
+#pragma omp parallel for
     for (int c = 0; c < nCells; c++) {
 
         Cell* cell = &cells[c];
@@ -243,10 +243,11 @@ void SPHFluidSimulation2D::computeForces() {
                     Particle* particleB = &particles[j];
                     Vec2 d = (particleA->pos - particleB->pos);
                     
-                    double r = d.magnitude();
-                    double diff = kernelRadius - r;
+                    double rSq = d.sqrMagnitude();  // only perform expensive sqrt-op if in kernal radius
+                    if (rSq < kernalRadiusSq) {
+                        double r = sqrt(rSq);
+                        double diff = kernelRadius - r;
 
-                    if (diff > 0) {
                         Vec2 deltaVel = particleB->velocity - particleA->velocity;
                         fpress += d.unit() * (particleB->mass * (particleA->pressure + particleB->pressure) / (2.f * particleB->density) * SPIKY_GRAD * (diff * diff * diff));
                         fvisc += deltaVel * ((viscosity * particleB->mass) / particleB->density * VISC_LAP * diff);
@@ -262,7 +263,7 @@ void SPHFluidSimulation2D::computeForces() {
 
 void SPHFluidSimulation2D::computeDensityPressure() {
 
-//#pragma omp parallel for
+#pragma omp parallel for
     for (int c = 0; c < nCells; c++)    // loop through each cell
     {
 		Cell* cell = &cells[c];
@@ -292,7 +293,7 @@ void SPHFluidSimulation2D::computeDensityPressure() {
                     Particle* particleB = &particles[ particleBIdx ];
 
                     double d = (particleA->pos - particleB->pos).sqrMagnitude();
-                    double diff = (kernelRadius * kernelRadius) - d;
+                    double diff = kernalRadiusSq - d;
 
                     if (diff > 0) {
                         particleA->density += particleB->mass * POLY6 * (diff * diff * diff);

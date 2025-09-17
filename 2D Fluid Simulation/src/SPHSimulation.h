@@ -49,13 +49,15 @@ private:
 	Vec2 simulationDimensions = Vec2(100, 100);
 
 	double kernelRadius = 16.0f;
+	double kernalRadiusSq = kernelRadius * kernelRadius;	// ofen used, don't recalculate
+
+	//// Simulation Constant	
 	double viscosity = 200.0f;
-
-
-	// Simulation Constant	
 	double RestDensity = 300.f;  // rest density
 	double GasConstant = 2000.f; // const for equation of state
-	float BoundDamping = -0.5f;
+	float BoundDamping = 0.5f;
+
+
 
 
 	// smoothing kernels defined in Müller and their gradients
